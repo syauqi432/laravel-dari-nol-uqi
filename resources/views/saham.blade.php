@@ -38,8 +38,13 @@
 <body>
 
     <div class="container">
-        <div class="header">
-            <h2>📈 Portofolio Saham Uqi</h2>
+       <div class="header">
+            <div>
+                <h2>📈 Portofolio Saham Uqi</h2>
+                <a href="https://github.com/syauqi432/laravel-dari-nol-uqi" target="_blank" style="color: #38bdf8; font-size: 13px; text-decoration: none; display: inline-block; margin-top: 4px;">
+                    🔗 Lihat Repository GitHub
+                </a>
+            </div>
             <a href="/saham/tambah" class="btn-tambah">+ Tambah Saham</a>
         </div>
 
