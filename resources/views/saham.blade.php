@@ -3,46 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio Saham</title>
+    <title>Portofolio Saham - Uqi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
-        h2 { color: #333; }
-        table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        th, td { padding: 12px 15px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #007bff; color: white; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: #0f172a; color: #e2e8f0; padding: 40px; }
+        .container { max-width: 1000px; margin: 0 auto; background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); border: 1px solid #334155; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        h2 { color: #f8fafc; font-size: 24px; font-weight: 700; }
+        .btn-tambah { background-color: #10b981; color: white; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px; transition: background 0.2s; }
+        .btn-tambah:hover { background-color: #059669; }
+
+        /* Kartu Ringkasan */
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .card { background: #0f172a; padding: 20px; border-radius: 8px; border: 1px solid #334155; }
+        .card-title { font-size: 12px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .card-value { font-size: 22px; font-weight: 700; color: #34d399; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #0f172a; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #334155; font-size: 14px; }
+        th { background-color: #1e293b; color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: rgba(51, 65, 85, 0.4); }
+        .badge { background-color: #334155; color: #38bdf8; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
+        .profit { color: #34d399; font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <h2>📊 Portofolio Saham Uqi</h2>
+    <div class="container">
+        <div class="header">
+            <h2>📈 Portofolio Saham Uqi</h2>
+            <a href="/saham/tambah" class="btn-tambah">+ Tambah Saham</a>
+        </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Kode Emiten</th>
-                <th>Nama Perusahaan</th>
-                <th>Sektor</th>
-                <th>Jumlah Lot</th>
-                <th>Harga Beli</th>
-                <th>Tanggal Beli</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($sahams as $index => $saham)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td><strong>{{ $saham->kode_emiten }}</strong></td>
-                <td>{{ $saham->nama_perusahaan }}</td>
-                <td>{{ $saham->sektor }}</td>
-                <td>{{ $saham->jumlah_lot }}</td>
-                <td>Rp {{ number_format($saham->harga_beli, 0, ',', '.') }}</td>
-                <td>{{ $saham->tanggal_beli }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+        <!-- Bagian Kotak Ringkasan -->
+        <div class="summary-cards">
+            <div class="card">
+                <div class="card-title">Total Nilai Portofolio</div>
+                <div class="card-value">Rp {{ number_format($totalInvestasi, 0, ',', '.') }}</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Total Jenis Emiten</div>
+                <div class="card-value" style="color: #38bdf8;">{{ count($sahams) }} Saham</div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Kode Emiten</th>
+                    <th>Nama Perusahaan</th>
+                    <th>Sektor</th>
+                    <th>Lot</th>
+                    <th>Harga Beli</th>
+                    <th>Tanggal Beli</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($sahams as $index => $saham)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td><span class="badge">{{ $saham->kode_emiten }}</span></td>
+                    <td style="font-weight: 500; color: #f1f5f9;">{{ $saham->nama_perusahaan }}</td>
+                    <td style="color: #94a3b8;">{{ $saham->sektor }}</td>
+                    <td>{{ $saham->jumlah_lot }}</td>
+                    <td class="profit">Rp {{ number_format($saham->harga_beli, 0, ',', '.') }}</td>
+                    <td style="color: #94a3b8;">{{ $saham->tanggal_beli }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
 </body>
-</html>
+</html> 

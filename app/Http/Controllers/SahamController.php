@@ -8,17 +8,18 @@ use App\Models\Saham;
 class SahamController extends Controller
 {
     // Menampilkan data (Sudah ada)
-    public function index()
-    {
-        $sahams = Saham::all();
-        return view('saham', compact('sahams'));
+   public function index()
+{
+    $sahams = Saham::all();
+
+    // Hitung total nilai investasi (Jumlah Lot * 100 * Harga Beli)
+    $totalInvestasi = 0;
+    foreach($sahams as $saham) {
+        $totalInvestasi += $saham->jumlah_lot * 100 * $saham->harga_beli;
     }
 
-    // [BARU] Menampilkan form tambah saham
-    public function create()
-    {
-        return view('tambah-saham');
-    }
+    return view('saham', compact('sahams', 'totalInvestasi'));
+}
 
     // [BARU] Menyimpan data inputan ke database
     public function store(Request $request)
