@@ -10,6 +10,6 @@ class SahamController extends Controller
     public function index()
     {
         $sahams = Saham::all();
-        return $sahams;
+        return view('saham', compact('sahams'));
     }
 }
