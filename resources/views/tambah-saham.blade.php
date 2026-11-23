@@ -3,31 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Saham - Portofolio Uqi</title>
+    <title>Tambah Saham - Uqi</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: #0f172a; color: #e2e8f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .form-container { width: 100%; max-width: 480px; background: #1e293b; padding: 35px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); border: 1px solid #334155; }
-        h2 { color: #f8fafc; font-size: 22px; font-weight: 700; margin-bottom: 20px; }
-        .form-group { margin-bottom: 18px; }
-        label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
-        input { width: 100%; padding: 10px 14px; background-color: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #fff; font-size: 14px; outline: none; transition: border-color 0.2s; }
-        input:focus { border-color: #10b981; }
-        .btn-group { display: flex; align-items: center; gap: 12px; margin-top: 25px; }
-        button { background-color: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; transition: background 0.2s; }
-        button:hover { background-color: #059669; }
-        a { text-decoration: none; color: #94a3b8; font-size: 14px; font-weight: 500; transition: color 0.2s; }
-        a:hover { color: #fff; }
+        body { background-color: #0f172a; color: #e2e8f0; padding: 40px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); border: 1px solid #334155; width: 100%; max-width: 500px; }
+        h2 { color: #f8fafc; font-size: 22px; font-weight: 700; margin-bottom: 20px; text-align: center; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+        input, select { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #f8fafc; font-size: 14px; }
+        input:focus { outline: none; border-color: #38bdf8; }
+        .btn-simpan { background-color: #10b981; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
+        .btn-simpan:hover { background-color: #059669; }
+        .btn-batal { display: block; text-align: center; margin-top: 12px; color: #94a3b8; text-decoration: none; font-size: 13px; }
+        .btn-batal:hover { color: #f8fafc; }
     </style>
 </head>
 <body>
 
-    <div class="form-container">
+    <div class="card">
         <h2>➕ Tambah Saham Baru</h2>
 
-        <form action="/saham" method="POST">
+        <form action="/saham" method="POST" enctype="multipart/form-data">
             @csrf
+
+            <div class="form-group">
+                <label>Nama Pemilik / Investor</label>
+                <input type="text" name="nama_pemilik" placeholder="Contoh: Syauqi" required>
+            </div>
+
             <div class="form-group">
                 <label>Kode Emiten</label>
                 <input type="text" name="kode_emiten" placeholder="Contoh: BBCA, TLKM" required>
@@ -49,8 +54,8 @@
             </div>
 
             <div class="form-group">
-                <label>Harga Beli (per lembar)</label>
-                <input type="number" step="any" name="harga_beli" placeholder="Contoh: 10000" required>
+                <label>Harga Beli (Per Lembar)</label>
+                <input type="number" name="harga_beli" placeholder="Contoh: 10000" required>
             </div>
 
             <div class="form-group">
@@ -58,10 +63,13 @@
                 <input type="date" name="tanggal_beli" required>
             </div>
 
-            <div class="btn-group">
-                <button type="submit">Simpan Saham</button>
-                <a href="/saham">Batal</a>
+            <div class="form-group">
+                <label>Foto Bukti / Logo (Opsional)</label>
+                <input type="file" name="foto" style="padding: 7px;">
             </div>
+
+            <button type="submit" class="btn-simpan">Simpan Saham</button>
+            <a href="/saham" class="btn-batal">Batal</a>
         </form>
     </div>
 

@@ -18,3 +18,8 @@ Route::post('/saham', [SahamController::class, 'store']);
 
 // Route untuk menghapus data saham berdasarkan ID
 Route::delete('/saham/{id}', [SahamController::class, 'destroy']);
+// Route untuk menampilkan form edit saham berdasarkan ID
+Route::get('/saham/{id}/edit', [SahamController::class, 'edit']);
+
+// Route untuk menyimpan perubahan data edit ke database
+Route::put('/saham/{id}', [SahamController::class, 'update']);
