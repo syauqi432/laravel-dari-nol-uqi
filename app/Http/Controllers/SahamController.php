@@ -67,15 +67,16 @@ class SahamController extends Controller
         $saham = Saham::findOrFail($id);
 
         $request->validate([
-            'nama_pemilik' => 'required',
-            'kode_emiten' => 'required',
-            'nama_perusahaan' => 'required',
-            'sektor' => 'required',
-            'jumlah_lot' => 'required|numeric',
-            'harga_beli' => 'required|numeric',
-            'tanggal_beli' => 'required|date',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+    'nama_pemilik' => 'required',
+    'kode_emiten' => 'required',
+    'nama_perusahaan' => 'required',
+    'sektor' => 'required',
+    'jumlah_lot' => 'required|numeric',
+    'harga_beli' => 'required|numeric',
+    'dividen_per_saham' => 'nullable|numeric', // <-- Tambahan aman
+    'tanggal_beli' => 'required|date',
+    'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+]);
 
         $input = $request->all();
 

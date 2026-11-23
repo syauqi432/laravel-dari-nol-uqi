@@ -114,21 +114,27 @@
             </form>
         </div>
 
-        <!-- RINGKASAN TOTAL MODAL -->
+        <!-- RINGKASAN TOTAL MODAL & DIVIDEN -->
         @php
             $totalModal = 0;
+            $totalDividenKeseluruhan = 0;
             foreach($saham as $item) {
                 $totalModal += $item->jumlah_lot * $item->harga_beli * 100;
+                $totalDividenKeseluruhan += $item->jumlah_lot * 100 * ($item->dividen_per_saham ?? 0);
             }
         @endphp
 
-        <div class="summary-box" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="summary-box" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
             <div>
                 <span style="font-size: 13px; opacity: 0.8;">Total Modal Keseluruhan:</span>
                 <h2 style="margin: 2px 0 0 0; color: #38bdf8;">Rp {{ number_format($totalModal, 0, ',', '.') }}</h2>
             </div>
+            <div>
+                <span style="font-size: 13px; opacity: 0.8;">Total Estimasi Dividen:</span>
+                <h2 style="margin: 2px 0 0 0; color: #34d399;">Rp {{ number_format($totalDividenKeseluruhan, 0, ',', '.') }}</h2>
+            </div>
             <div style="text-align: right;">
-                <span style="font-size: 13px; opacity: 0.8;">Total Emiten Ditampilkan:</span>
+                <span style="font-size: 13px; opacity: 0.8;">Total Emiten:</span>
                 <h3 style="margin: 2px 0 0 0;">{{ count($saham) }} Emiten</h3>
             </div>
         </div>
@@ -156,12 +162,16 @@
                     <th>Lot</th>
                     <th>Harga Beli</th>
                     <th>Total Modal</th>
+                    <th>Total Dividen</th>
                     <th style="text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($saham as $index => $item)
-                @php $modalItem = $item->jumlah_lot * $item->harga_beli * 100; @endphp
+                @php
+                    $modalItem = $item->jumlah_lot * $item->harga_beli * 100;
+                    $totalDividenItem = $item->jumlah_lot * 100 * ($item->dividen_per_saham ?? 0);
+                @endphp
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>
@@ -177,6 +187,7 @@
                     <td>{{ $item->jumlah_lot }}</td>
                     <td>Rp {{ number_format($item->harga_beli, 0, ',', '.') }}</td>
                     <td style="font-weight: 600; color: #38bdf8;">Rp {{ number_format($modalItem, 0, ',', '.') }}</td>
+                    <td style="font-weight: 600; color: #34d399;">Rp {{ number_format($totalDividenItem, 0, ',', '.') }}</td>
                     <td style="text-align: center; white-space: nowrap;">
                         <a href="/saham/{{ $item->id }}/edit" class="btn-edit" style="margin-right: 4px;">Edit</a>
                         <form action="/saham/{{ $item->id }}" method="POST" onsubmit="return confirm('Yakin hapus saham ini?');" style="display:inline;">
@@ -188,7 +199,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="9" style="text-align: center; opacity: 0.7; padding: 30px;">Tidak ada data saham yang ditemukan.</td>
+                    <td colspan="10" style="text-align: center; opacity: 0.7; padding: 30px;">Tidak ada data saham yang ditemukan.</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -233,7 +244,7 @@
             }
         });
 
-        // Simulasi pergerakan harga real-time bergerak otomatis tiap 2 detik
+        // Simulasi pergerakan harga real-time
         setInterval(() => {
             const now = new Date();
             const timeString = now.getHours().toString().padStart(2, '0') + ':' +
@@ -247,7 +258,6 @@
             liveChart.data.labels.push(timeString);
             liveChart.data.datasets[0].data.push(newPrice);
 
-            // Batasi data maksimal 8 titik agar grafik tetap rapi berjalan
             if (liveChart.data.labels.length > 8) {
                 liveChart.data.labels.shift();
                 liveChart.data.datasets[0].data.shift();

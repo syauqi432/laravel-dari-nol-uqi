@@ -56,6 +56,11 @@
             <div class="form-group">
                 <label>Harga Beli (Per Lembar)</label>
                 <input type="number" name="harga_beli" placeholder="Contoh: 10000" required>
+                <div style="margin-bottom: 15px;">
+    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Dividen per Saham (Rp):</label>
+    <input type="number" name="dividen_per_saham" value="{{ old('dividen_per_saham', $saham->dividen_per_saham ?? 0) }}" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #f8fafc;" placeholder="Contoh: 150">
+    <small style="opacity: 0.7;">Masukkan estimasi dividen tahunan per lembar (opsional).</small>
+</div>
             </div>
 
             <div class="form-group">
