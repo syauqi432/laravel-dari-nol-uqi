@@ -7,26 +7,28 @@ use App\Models\Saham;
 
 class SahamController extends Controller
 {
-    // Menampilkan data dan total nilai investasi
-    public function index()
+    public function index(Request $request)
     {
-        $sahams = Saham::all();
+        $search = $request->input('search');
+        $sektor = $request->input('sektor');
 
-        $totalInvestasi = 0;
-        foreach($sahams as $saham) {
-            $totalInvestasi += $saham->jumlah_lot * 100 * $saham->harga_beli;
-        }
+        $saham = Saham::when($search, function ($query, $search) {
+            return $query->where('kode_emiten', 'like', "%{$search}%")
+                         ->orWhere('nama_perusahaan', 'like', "%{$search}%");
+        })->when($sektor, function ($query, $sektor) {
+            return $query->where('sektor', $sektor);
+        })->get();
 
-        return view('saham', compact('sahams', 'totalInvestasi'));
+        $sektorList = Saham::select('sektor')->distinct()->pluck('sektor');
+
+        return view('saham', compact('saham', 'sektorList'));
     }
 
-    // Menampilkan form tambah saham
     public function create()
     {
         return view('tambah-saham');
     }
 
-    // Menyimpan data inputan baru ke database
     public function store(Request $request)
     {
         $request->validate([
@@ -40,30 +42,30 @@ class SahamController extends Controller
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $data = $request->all();
+        $input = $request->all();
 
-        if ($request->hasFile('foto')) {
-            $file = $request->file('foto');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads'), $filename);
-            $data['foto'] = $filename;
+        if ($image = $request->file('foto')) {
+            $destinationPath = 'uploads/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['foto'] = "$profileImage";
         }
 
-        Saham::create($data);
+        Saham::create($input);
 
-        return redirect('/saham');
+        return redirect('/saham')->with('success', 'Data saham berhasil ditambahkan!');
     }
 
-    // Menampilkan form edit saham berdasarkan ID
     public function edit($id)
     {
         $saham = Saham::findOrFail($id);
         return view('edit-saham', compact('saham'));
     }
 
-    // Menyimpan perubahan data edit ke database
     public function update(Request $request, $id)
     {
+        $saham = Saham::findOrFail($id);
+
         $request->validate([
             'nama_pemilik' => 'required',
             'kode_emiten' => 'required',
@@ -75,36 +77,27 @@ class SahamController extends Controller
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $saham = Saham::findOrFail($id);
-        $data = $request->all();
+        $input = $request->all();
 
-        if ($request->hasFile('foto')) {
-            if ($saham->foto && file_exists(public_path('uploads/' . $saham->foto))) {
-                unlink(public_path('uploads/' . $saham->foto));
-            }
-
-            $file = $request->file('foto');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads'), $filename);
-            $data['foto'] = $filename;
+        if ($image = $request->file('foto')) {
+            $destinationPath = 'uploads/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['foto'] = "$profileImage";
+        } else {
+            unset($input['foto']);
         }
 
-        $saham->update($data);
+        $saham->update($input);
 
-        return redirect('/saham');
+        return redirect('/saham')->with('success', 'Data saham berhasil diubah!');
     }
 
-    // Menghapus data saham dari database
     public function destroy($id)
     {
         $saham = Saham::findOrFail($id);
-
-        if ($saham->foto && file_exists(public_path('uploads/' . $saham->foto))) {
-            unlink(public_path('uploads/' . $saham->foto));
-        }
-
         $saham->delete();
 
-        return redirect('/saham');
+        return redirect('/saham')->with('success', 'Data saham berhasil dihapus!');
     }
 }
