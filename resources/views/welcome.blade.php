@@ -3,46 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio Saham Saya</title>
+    <title>Portofolio Saham Ultimate Pro - Uqi</title>
+    <!-- CDN Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
-        h2 { color: #333; }
-        table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        th, td { padding: 12px 15px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #007bff; color: white; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
-    </style>
-</head>
-<body>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --border-color: #334155;
+            --table-hover: #273548;
+        }
+        .light-mode {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-color: #0f172a;
+            --border-color: #cbd5e1;
+            --table-hover: #f8fafc;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .header h2 { margin: 0; }
+        .btn-group { display: flex; gap: 10px; align-items: center; }
+        .btn-tambah { background-color: #10b981; color: white; padding: 10px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; }
+        .btn-tambah:hover { background-color: #059669; }
+        .btn-theme { background-color: #64748b; color: white; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .top-tools { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .search-form, .filter-form { display: flex; gap: 10px; }
+        input, select { padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); }
+        .btn-action { padding: 8px 16px; background: #38bdf8; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: bold; }
+        .btn-reset { padding: 8px 12px; background: #64748b; border-radius: 6px; color: white; text-decoration: none; display: flex; align-items: center; }
 
-    <h2>📊 Portofolio Saham Uqi</h2>
-
-    <table>
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Kode Emiten</th>
-                <th>Nama Perusahaan</th>
-                <th>Sektor</th>
-                <th>Jumlah Lot</th>
-                <th>Harga Beli</th>
-                <th>Tanggal Beli</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($sahams as $index => $saham)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td><strong>{{ $saham->kode_emiten }}</strong></td>
-                <td>{{ $saham->nama_perusahaan }}</td>
-                <td>{{ $saham->sektor }}</td>
-                <td>{{ $saham->jumlah_lot }}</td>
-                <td>Rp {{ number_format($saham->harga_beli, 0, ',', '.') }}</td>
-                <td>{{ $saham->tanggal_beli }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-</body>
-</html>
+        .summary-box, .chart-box {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #38bdf8;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+        th { background-color: var(--border-color); font-weight: 600; }
+        tr:hover { background-color: var(--table-hover); }
+        .badge { background-color: #3b82f6; color: white; padding: 4
