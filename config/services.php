@@ -24,6 +24,15 @@ return [
 
     'alpha_vantage' => [
         'api_key' => env('ALPHA_VANTAGE_API_KEY'),
+        'base_url' => 'https://www.alphavantage.co/query',
+    ],
+
+    'yahoo_finance' => [
+        'chart_url' => 'https://query1.finance.yahoo.com/v8/finance/chart',
+    ],
+
+    'google_news' => [
+        'rss_url' => 'https://news.google.com/rss/search',
     ],
 
     'ses' => [

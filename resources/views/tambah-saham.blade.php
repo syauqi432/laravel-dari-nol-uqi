@@ -47,6 +47,30 @@
                 <label>Sektor</label>
                 <input type="text" name="sektor" placeholder="Contoh: Financials" required>
             </div>
+            <div class="form-group">
+                <label>PER (Opsional)</label>
+                <input type="number" step="0.0001" min="0" name="per" value="{{ old('per') }}" placeholder="Isi dari sumber terverifikasi">
+            </div>
+            <div class="form-group">
+                <label>PBV (Opsional)</label>
+                <input type="number" step="0.0001" min="0" name="pbv" value="{{ old('pbv') }}">
+            </div>
+            <div class="form-group">
+                <label>ROE (%) (Opsional)</label>
+                <input type="number" step="0.01" name="roe" value="{{ old('roe') }}">
+            </div>
+            <div class="form-group">
+                <label>Pertumbuhan Pendapatan (%) (Opsional)</label>
+                <input type="number" step="0.01" name="pertumbuhan_pendapatan" value="{{ old('pertumbuhan_pendapatan') }}">
+            </div>
+            <div class="form-group">
+                <label>Rasio Utang / Ekuitas (Opsional)</label>
+                <input type="number" step="0.0001" min="0" name="rasio_utang_ekuitas" value="{{ old('rasio_utang_ekuitas') }}">
+            </div>
+            <div class="form-group">
+                <label>Kapitalisasi Pasar (Rp, Opsional)</label>
+                <input type="number" step="0.01" min="0" name="kapitalisasi_pasar" value="{{ old('kapitalisasi_pasar') }}">
+            </div>
 
             <div class="form-group">
                 <label>Jumlah Lot</label>
